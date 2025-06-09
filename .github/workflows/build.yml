@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-latest,ubuntu-24.04-arm]
+        runner: [ubuntu-latest,]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Free Disk-Space
@@ -64,12 +64,10 @@ jobs:
           cache-to: type=registry,mode=max,ref=${{ steps.imagename.outputs.name }}:cache${{ (contains(matrix.runner, 'arm') && '-arm') || '' }}
           cache-from: type=registry,ref=${{ steps.imagename.outputs.name }}:cache${{ (contains(matrix.runner, 'arm') && '-arm') || '' }}
       - name: Get download cache key
-        if: ${{ !cancelled() && !contains(matrix.runner, 'arm') }}
         id: dl_cache
         run: |
           echo "dltagname=$(./util/get_dl_cache_tag.sh)" >> $GITHUB_OUTPUT
       - name: Cache
-        if: ${{ !cancelled() && !contains(matrix.runner, 'arm') }}
         uses: actions/cache@v4
         with:
           path: .cache/downloads
@@ -77,7 +75,6 @@ jobs:
           restore-keys: |
             download-cache-
       - name: Update Cache
-        if: ${{ !cancelled() && !contains(matrix.runner, 'arm') }}
         run: |
           set -e
           ./download.sh
@@ -100,7 +97,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [win64,winarm64,linux64,linuxarm64]
+        target: [win64]
     steps:
       - name: Free Disk-Space
         run: df -h && sudo apt-get clean && docker system prune -a -f && sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc && df -h
