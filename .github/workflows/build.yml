@@ -116,7 +116,7 @@ jobs:
       - name: Replace spaces in string
         id: strs
         run: |
-          D_IMG="${{ matrix.target }}-${{ matrix.variant }}"
+          D_IMG="${{ matrix.target }}"
           echo "docker_img=${D_IMG// /-}" >> $GITHUB_OUTPUT
       - name: Image Name
         id: imagename
