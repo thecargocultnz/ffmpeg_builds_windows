@@ -177,7 +177,9 @@ jobs:
       - name: Image Name
         id: imagename
         run: |
-          IMG="${GITHUB_REPOSITORY,,}/${{ matrix.target }}-${{ matrix.variant }}"
+          SLUG="${{ matrix.target }}-${{ matrix.variant }}"
+          SLUG="${SLUG// /-}"  # replaces ALL spaces
+          IMG="${GITHUB_REPOSITORY,,}/${SLUG}"
           echo "name=ghcr.io/${IMG/ /-}" >> $GITHUB_OUTPUT
           echo "rawname=${IMG/ /-}" >> $GITHUB_OUTPUT
       - name: Get download cache key
