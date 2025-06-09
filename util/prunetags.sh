@@ -32,7 +32,9 @@ done
 
 for TAG in ${TAGS[@]}; do
     echo "Deleting ${TAG}"
-    gh release delete --cleanup-tag --yes "${TAG}"
+    if ! gh release delete --cleanup-tag --yes "${TAG}"; then
+        echo "Warning: Failed to delete release for tag ${TAG} (may not exist)"
+    fi
 done
 
 git push --tags --prune
